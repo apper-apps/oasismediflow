@@ -1,0 +1,229 @@
+{
+  "clinical": [
+    {
+      "Id": 1,
+      "type": "patient-record",
+      "name": "Patient Record",
+      "description": "Access and retrieve patient medical records",
+      "icon": "User",
+      "category": "clinical",
+      "color": "#2563eb",
+      "inputs": ["trigger"],
+      "outputs": ["patientData"],
+      "config": {
+        "patientId": "",
+        "fields": ["demographics", "allergies", "medications", "conditions"]
+      }
+    },
+    {
+      "Id": 2,
+      "type": "lab-results",
+      "name": "Lab Results",
+      "description": "Retrieve and process laboratory test results",
+      "icon": "TestTube",
+      "category": "clinical",
+      "color": "#059669",
+      "inputs": ["patientData"],
+      "outputs": ["labData"],
+      "config": {
+        "testTypes": ["bloodwork", "urine", "imaging"],
+        "dateRange": "30"
+      }
+    },
+    {
+      "Id": 3,
+      "type": "diagnosis",
+      "name": "Diagnosis Assistant",
+      "description": "AI-powered diagnosis suggestions based on symptoms",
+      "icon": "Brain",
+      "category": "clinical",
+      "color": "#7c3aed",
+      "inputs": ["symptoms", "labData"],
+      "outputs": ["suggestions"],
+      "config": {
+        "confidenceThreshold": "0.8",
+        "includeRareDiseases": false
+      }
+    },
+    {
+      "Id": 4,
+      "type": "prescription",
+      "name": "Prescription Management",
+      "description": "Generate and manage patient prescriptions",
+      "icon": "Pill",
+      "category": "clinical",
+      "color": "#dc2626",
+      "inputs": ["diagnosis", "patientData"],
+      "outputs": ["prescription"],
+      "config": {
+        "pharmacy": "",
+        "checkInteractions": true,
+        "genericPreferred": true
+      }
+    }
+  ],
+  "administrative": [
+    {
+      "Id": 5,
+      "type": "appointment",
+      "name": "Appointment Scheduling",
+      "description": "Schedule and manage patient appointments",
+      "icon": "Calendar",
+      "category": "administrative",
+      "color": "#f59e0b",
+      "inputs": ["patientData"],
+      "outputs": ["appointment"],
+      "config": {
+        "duration": "30",
+        "type": "consultation",
+        "provider": ""
+      }
+    },
+    {
+      "Id": 6,
+      "type": "insurance",
+      "name": "Insurance Verification",
+      "description": "Verify patient insurance coverage and benefits",
+      "icon": "Shield",
+      "category": "administrative",
+      "color": "#0891b2",
+      "inputs": ["patientData"],
+      "outputs": ["coverage"],
+      "config": {
+        "verifyEligibility": true,
+        "checkCoverage": true,
+        "getPriorAuth": false
+      }
+    },
+    {
+      "Id": 7,
+      "type": "billing",
+      "name": "Medical Billing",
+      "description": "Generate medical bills and process payments",
+      "icon": "DollarSign",
+      "category": "administrative",
+      "color": "#16a34a",
+      "inputs": ["appointment", "procedures"],
+      "outputs": ["invoice"],
+      "config": {
+        "codingSystem": "ICD-10",
+        "autoSubmit": false,
+        "paymentTerms": "30"
+      }
+    },
+    {
+      "Id": 8,
+      "type": "referral",
+      "name": "Specialist Referral",
+      "description": "Create referrals to medical specialists",
+      "icon": "UserCheck",
+      "category": "administrative",
+      "color": "#8b5cf6",
+      "inputs": ["diagnosis", "patientData"],
+      "outputs": ["referral"],
+      "config": {
+        "specialty": "",
+        "urgency": "routine",
+        "notes": ""
+      }
+    }
+  ],
+  "communication": [
+    {
+      "Id": 9,
+      "type": "patient-notification",
+      "name": "Patient Notification",
+      "description": "Send automated notifications to patients",
+      "icon": "Bell",
+      "category": "communication",
+      "color": "#ec4899",
+      "inputs": ["trigger"],
+      "outputs": ["sent"],
+      "config": {
+        "method": "email",
+        "template": "appointment-reminder",
+        "sendTime": "1day"
+      }
+    },
+    {
+      "Id": 10,
+      "type": "sms-alert",
+      "name": "SMS Alert",
+      "description": "Send SMS alerts for urgent notifications",
+      "icon": "MessageSquare",
+      "category": "communication",
+      "color": "#f97316",
+      "inputs": ["trigger"],
+      "outputs": ["sent"],
+      "config": {
+        "message": "",
+        "urgency": "normal",
+        "allowOptOut": true
+      }
+    },
+    {
+      "Id": 11,
+      "type": "email-report",
+      "name": "Email Report",
+      "description": "Generate and send automated email reports",
+      "icon": "Mail",
+      "category": "communication",
+      "color": "#3b82f6",
+      "inputs": ["data"],
+      "outputs": ["sent"],
+      "config": {
+        "recipients": "",
+        "format": "pdf",
+        "schedule": "weekly"
+      }
+    }
+  ],
+  "data": [
+    {
+      "Id": 12,
+      "type": "data-filter",
+      "name": "Data Filter",
+      "description": "Filter and process medical data",
+      "icon": "Filter",
+      "category": "data",
+      "color": "#64748b",
+      "inputs": ["data"],
+      "outputs": ["filtered"],
+      "config": {
+        "conditions": [],
+        "operator": "and"
+      }
+    },
+    {
+      "Id": 13,
+      "type": "data-transform",
+      "name": "Data Transform",
+      "description": "Transform data between different formats",
+      "icon": "RefreshCw",
+      "category": "data",
+      "color": "#6366f1",
+      "inputs": ["data"],
+      "outputs": ["transformed"],
+      "config": {
+        "inputFormat": "HL7",
+        "outputFormat": "FHIR",
+        "mapping": {}
+      }
+    },
+    {
+      "Id": 14,
+      "type": "analytics",
+      "name": "Analytics Engine",
+      "description": "Analyze medical data and generate insights",
+      "icon": "BarChart",
+      "category": "data",
+      "color": "#10b981",
+      "inputs": ["data"],
+      "outputs": ["insights"],
+      "config": {
+        "metrics": ["trends", "anomalies"],
+        "timeframe": "30days"
+      }
+    }
+  ]
+}

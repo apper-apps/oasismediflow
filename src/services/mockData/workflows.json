@@ -1,0 +1,55 @@
+[
+  {
+    "Id": 1,
+    "name": "Patient Onboarding",
+    "description": "Complete workflow for new patient registration and initial assessment",
+    "nodes": [
+      {
+        "id": "node-1",
+        "type": "patient-record",
+        "position": { "x": 100, "y": 100 },
+        "config": { "patientId": "new", "fields": ["demographics", "insurance"] },
+        "status": "idle"
+      },
+      {
+        "id": "node-2",
+        "type": "insurance",
+        "position": { "x": 400, "y": 100 },
+        "config": { "verifyEligibility": true },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "conn-1",
+        "sourceNodeId": "node-1",
+        "sourcePortId": "patientData",
+        "targetNodeId": "node-2",
+        "targetPortId": "patientData"
+      }
+    ],
+    "version": 1,
+    "status": "draft",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-15T14:45:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Lab Results Processing",
+    "description": "Automated processing and notification of lab results",
+    "nodes": [
+      {
+        "id": "node-3",
+        "type": "lab-results",
+        "position": { "x": 100, "y": 200 },
+        "config": { "testTypes": ["bloodwork"], "dateRange": "7" },
+        "status": "idle"
+      }
+    ],
+    "connections": [],
+    "version": 1,
+    "status": "active",
+    "createdAt": "2024-01-14T09:15:00Z",
+    "updatedAt": "2024-01-16T11:20:00Z"
+  }
+]
