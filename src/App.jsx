@@ -2,12 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Dashboard from "@/components/pages/Dashboard";
 import WorkflowBuilder from "@/components/pages/WorkflowBuilder";
+import TemplateGallery from "@/components/pages/TemplateGallery";
 
 function App() {
   return (
     <>
-      <Routes>
+<Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/templates" element={<TemplateGallery />} />
         <Route path="/workflow/:id" element={<WorkflowBuilder />} />
       </Routes>
       

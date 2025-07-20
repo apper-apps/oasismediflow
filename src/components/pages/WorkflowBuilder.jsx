@@ -24,9 +24,14 @@ const WorkflowBuilder = () => {
   const [executing, setExecuting] = useState(false);
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const templateId = urlParams.get('template');
+    
     if (id && id !== "new") {
       loadWorkflow();
+    } else if (templateId) {
+      loadFromTemplate(templateId);
     } else {
       // Create new workflow
       setWorkflow({
@@ -48,6 +53,37 @@ const WorkflowBuilder = () => {
       setWorkflow(data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+};
+
+  const loadFromTemplate = async (templateId) => {
+    try {
+      setLoading(true);
+      setError("");
+      const { templateService } = await import("@/services/api/templateService");
+      const template = await templateService.getById(templateId);
+      
+      // Convert template to workflow format
+      setWorkflow({
+        name: `${template.name} (Copy)`,
+        description: template.description,
+        nodes: template.nodes.map(node => ({
+          ...node,
+          id: `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        })),
+        connections: template.connections.map(conn => ({
+          ...conn,
+          id: `conn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        })),
+        status: "draft"
+      });
+      
+      toast.success(`Template "${template.name}" loaded successfully`);
+    } catch (err) {
+      setError("Failed to load template");
+      toast.error("Failed to load template");
     } finally {
       setLoading(false);
     }

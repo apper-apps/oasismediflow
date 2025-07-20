@@ -1,0 +1,488 @@
+[
+  {
+    "Id": 1,
+    "name": "Patient Onboarding Complete",
+    "description": "Comprehensive workflow for new patient registration, insurance verification, and initial assessment setup",
+    "category": "patient-care",
+    "features": [
+      "Automated insurance verification",
+      "Patient demographic collection",
+      "Medical history intake",
+      "Appointment scheduling integration",
+      "Welcome communication sequence"
+    ],
+    "tags": ["registration", "insurance", "intake", "new-patient"],
+    "estimatedTime": "15-20 min",
+    "nodes": [
+      {
+        "id": "template-node-1",
+        "type": "patient-record",
+        "position": { "x": 100, "y": 100 },
+        "config": { 
+          "patientId": "new", 
+          "fields": ["demographics", "insurance", "emergency_contact"],
+          "required": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-2",
+        "type": "insurance",
+        "position": { "x": 400, "y": 100 },
+        "config": { 
+          "verifyEligibility": true,
+          "checkBenefits": true,
+          "generateAuthRequests": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-3",
+        "type": "medical-history",
+        "position": { "x": 700, "y": 100 },
+        "config": { 
+          "categories": ["allergies", "medications", "conditions"],
+          "requireSignature": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-4",
+        "type": "notification",
+        "position": { "x": 400, "y": 300 },
+        "config": { 
+          "type": "welcome_email",
+          "template": "new_patient_welcome"
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-1",
+        "sourceNodeId": "template-node-1",
+        "sourcePortId": "patientData",
+        "targetNodeId": "template-node-2",
+        "targetPortId": "patientData"
+      },
+      {
+        "id": "template-conn-2",
+        "sourceNodeId": "template-node-1",
+        "sourcePortId": "patientData",
+        "targetNodeId": "template-node-3",
+        "targetPortId": "patientData"
+      },
+      {
+        "id": "template-conn-3",
+        "sourceNodeId": "template-node-2",
+        "sourcePortId": "verificationComplete",
+        "targetNodeId": "template-node-4",
+        "targetPortId": "trigger"
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "name": "Lab Results Processing",
+    "description": "Automated processing, interpretation, and notification workflow for laboratory test results",
+    "category": "diagnostics",
+    "features": [
+      "Automated result parsing",
+      "Critical value alerts",
+      "Provider notification",
+      "Patient portal integration",
+      "Follow-up appointment scheduling"
+    ],
+    "tags": ["lab-results", "alerts", "automation", "critical-values"],
+    "estimatedTime": "5-10 min",
+    "nodes": [
+      {
+        "id": "template-node-5",
+        "type": "lab-results",
+        "position": { "x": 100, "y": 200 },
+        "config": { 
+          "testTypes": ["bloodwork", "urine", "culture"],
+          "autoProcess": true,
+          "flagCritical": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-6",
+        "type": "condition-check",
+        "position": { "x": 400, "y": 150 },
+        "config": { 
+          "condition": "critical_values",
+          "thresholds": "lab_standard"
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-7",
+        "type": "notification",
+        "position": { "x": 700, "y": 100 },
+        "config": { 
+          "type": "urgent_alert",
+          "recipients": ["primary_provider", "lab_manager"]
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-8",
+        "type": "patient-portal",
+        "position": { "x": 700, "y": 250 },
+        "config": { 
+          "action": "publish_results",
+          "includeInterpretation": true
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-4",
+        "sourceNodeId": "template-node-5",
+        "sourcePortId": "results",
+        "targetNodeId": "template-node-6",
+        "targetPortId": "input"
+      },
+      {
+        "id": "template-conn-5",
+        "sourceNodeId": "template-node-6",
+        "sourcePortId": "critical",
+        "targetNodeId": "template-node-7",
+        "targetPortId": "trigger"
+      },
+      {
+        "id": "template-conn-6",
+        "sourceNodeId": "template-node-6",
+        "sourcePortId": "normal",
+        "targetNodeId": "template-node-8",
+        "targetPortId": "trigger"
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "name": "Emergency Department Triage",
+    "description": "Rapid assessment and prioritization workflow for emergency department patients",
+    "category": "emergency",
+    "features": [
+      "ESI-based triage scoring",
+      "Automatic bed assignment",
+      "Provider notification by priority",
+      "Real-time status tracking",
+      "Family notification system"
+    ],
+    "tags": ["triage", "emergency", "esi", "rapid-assessment"],
+    "estimatedTime": "3-5 min",
+    "nodes": [
+      {
+        "id": "template-node-9",
+        "type": "triage-assessment",
+        "position": { "x": 100, "y": 300 },
+        "config": { 
+          "protocol": "ESI",
+          "vitalSigns": true,
+          "chiefComplaint": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-10",
+        "type": "priority-assignment",
+        "position": { "x": 400, "y": 300 },
+        "config": { 
+          "levels": [1, 2, 3, 4, 5],
+          "autoAssign": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-11",
+        "type": "bed-management",
+        "position": { "x": 700, "y": 250 },
+        "config": { 
+          "checkAvailability": true,
+          "assignByPriority": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-12",
+        "type": "notification",
+        "position": { "x": 700, "y": 350 },
+        "config": { 
+          "type": "provider_alert",
+          "urgencyBased": true
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-7",
+        "sourceNodeId": "template-node-9",
+        "sourcePortId": "assessment",
+        "targetNodeId": "template-node-10",
+        "targetPortId": "input"
+      },
+      {
+        "id": "template-conn-8",
+        "sourceNodeId": "template-node-10",
+        "sourcePortId": "priority",
+        "targetNodeId": "template-node-11",
+        "targetPortId": "priority"
+      },
+      {
+        "id": "template-conn-9",
+        "sourceNodeId": "template-node-10",
+        "sourcePortId": "priority",
+        "targetNodeId": "template-node-12",
+        "targetPortId": "priority"
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "name": "Appointment Reminder System",
+    "description": "Multi-channel appointment reminder workflow with confirmation tracking",
+    "category": "administration",
+    "features": [
+      "48-hour advance reminders",
+      "Multi-channel delivery (SMS, email, phone)",
+      "Confirmation tracking",
+      "Automatic reschedule handling",
+      "No-show prediction analytics"
+    ],
+    "tags": ["appointments", "reminders", "sms", "email", "confirmation"],
+    "estimatedTime": "2-3 min",
+    "nodes": [
+      {
+        "id": "template-node-13",
+        "type": "scheduler",
+        "position": { "x": 100, "y": 400 },
+        "config": { 
+          "trigger": "48_hours_before",
+          "businessHours": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-14",
+        "type": "patient-communication",
+        "position": { "x": 400, "y": 350 },
+        "config": { 
+          "channels": ["sms", "email"],
+          "template": "appointment_reminder",
+          "includeInstructions": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-15",
+        "type": "response-tracker",
+        "position": { "x": 700, "y": 350 },
+        "config": { 
+          "trackConfirmation": true,
+          "timeout": "24_hours"
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-16",
+        "type": "follow-up",
+        "position": { "x": 400, "y": 450 },
+        "config": { 
+          "noResponseAction": "phone_call",
+          "rescheduleOption": true
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-10",
+        "sourceNodeId": "template-node-13",
+        "sourcePortId": "trigger",
+        "targetNodeId": "template-node-14",
+        "targetPortId": "send"
+      },
+      {
+        "id": "template-conn-11",
+        "sourceNodeId": "template-node-14",
+        "sourcePortId": "sent",
+        "targetNodeId": "template-node-15",
+        "targetPortId": "track"
+      },
+      {
+        "id": "template-conn-12",
+        "sourceNodeId": "template-node-15",
+        "sourcePortId": "no_response",
+        "targetNodeId": "template-node-16",
+        "targetPortId": "trigger"
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "name": "Prescription Refill Automation",
+    "description": "Streamlined prescription refill processing with pharmacy integration",
+    "category": "patient-care",
+    "features": [
+      "Automated refill requests",
+      "Pharmacy integration",
+      "Provider approval workflow",
+      "Patient notification",
+      "Controlled substance handling"
+    ],
+    "tags": ["prescriptions", "refills", "pharmacy", "automation"],
+    "estimatedTime": "5-8 min",
+    "nodes": [
+      {
+        "id": "template-node-17",
+        "type": "prescription-request",
+        "position": { "x": 100, "y": 500 },
+        "config": { 
+          "source": "patient_portal",
+          "validateEligibility": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-18",
+        "type": "medication-check",
+        "position": { "x": 400, "y": 500 },
+        "config": { 
+          "checkInteractions": true,
+          "verifyAllergies": true,
+          "controlledSubstances": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-19",
+        "type": "provider-review",
+        "position": { "x": 700, "y": 450 },
+        "config": { 
+          "requireApproval": "controlled_substances",
+          "autoApprove": "routine_medications"
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-20",
+        "type": "pharmacy-integration",
+        "position": { "x": 700, "y": 550 },
+        "config": { 
+          "sendToPharmacy": true,
+          "preferredPharmacy": "patient_choice"
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-13",
+        "sourceNodeId": "template-node-17",
+        "sourcePortId": "request",
+        "targetNodeId": "template-node-18",
+        "targetPortId": "medication"
+      },
+      {
+        "id": "template-conn-14",
+        "sourceNodeId": "template-node-18",
+        "sourcePortId": "approved",
+        "targetNodeId": "template-node-19",
+        "targetPortId": "review"
+      },
+      {
+        "id": "template-conn-15",
+        "sourceNodeId": "template-node-19",
+        "sourcePortId": "approved",
+        "targetNodeId": "template-node-20",
+        "targetPortId": "send"
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "name": "Chronic Care Management",
+    "description": "Comprehensive workflow for managing patients with chronic conditions",
+    "category": "patient-care",
+    "features": [
+      "Regular health monitoring",
+      "Medication adherence tracking",
+      "Care plan coordination",
+      "Provider communication",
+      "Health metrics tracking"
+    ],
+    "tags": ["chronic-care", "monitoring", "care-plan", "adherence"],
+    "estimatedTime": "10-15 min",
+    "nodes": [
+      {
+        "id": "template-node-21",
+        "type": "health-monitoring",
+        "position": { "x": 100, "y": 600 },
+        "config": { 
+          "metrics": ["blood_pressure", "glucose", "weight"],
+          "frequency": "weekly"
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-22",
+        "type": "medication-adherence",
+        "position": { "x": 400, "y": 550 },
+        "config": { 
+          "trackRefills": true,
+          "missedDoseAlerts": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-23",
+        "type": "care-coordinator",
+        "position": { "x": 400, "y": 650 },
+        "config": { 
+          "reviewFrequency": "monthly",
+          "escalationRules": true
+        },
+        "status": "idle"
+      },
+      {
+        "id": "template-node-24",
+        "type": "provider-dashboard",
+        "position": { "x": 700, "y": 600 },
+        "config": { 
+          "showTrends": true,
+          "alertThresholds": true
+        },
+        "status": "idle"
+      }
+    ],
+    "connections": [
+      {
+        "id": "template-conn-16",
+        "sourceNodeId": "template-node-21",
+        "sourcePortId": "metrics",
+        "targetNodeId": "template-node-23",
+        "targetPortId": "healthData"
+      },
+      {
+        "id": "template-conn-17",
+        "sourceNodeId": "template-node-22",
+        "sourcePortId": "adherence",
+        "targetNodeId": "template-node-23",
+        "targetPortId": "medicationData"
+      },
+      {
+        "id": "template-conn-18",
+        "sourceNodeId": "template-node-23",
+        "sourcePortId": "summary",
+        "targetNodeId": "template-node-24",
+        "targetPortId": "display"
+      }
+    ]
+  }
+]
